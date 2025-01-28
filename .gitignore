@@ -1,0 +1,13 @@
+# Oracle JDK
+jdk-6u45-linux-x64.bin
+
+# Build directory
+build/
+
+# Data directory
+data/
+
+# Test output
+TEST-*
+*.log
+*.properties
