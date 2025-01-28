@@ -980,7 +980,7 @@ public class Method implements MethodInterface {
 	 */
 	private boolean isLeaderNew(CodeLineInterface cl) {
 		if (cl.getInstruction().getType() == InstructionType.JMP
-				|| cl.getInstruction().getType() == InstructionType.SWITCH // für
+				|| cl.getInstruction().getType() == InstructionType.SWITCH // fuer
 																			// den
 																			// default
 																			// fall

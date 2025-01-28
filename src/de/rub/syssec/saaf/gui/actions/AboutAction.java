@@ -32,7 +32,7 @@ import javax.swing.event.HyperlinkListener;
 import de.rub.syssec.saaf.Main;
 
 /**
- * @author Christian Kröger
+ * @author Christian Kroeger
  *
  */
 public class AboutAction extends AbstractAction {
@@ -77,13 +77,13 @@ public class AboutAction extends AbstractAction {
 				+ "</a><br/><br/>"
 				+ "Institution:<br/>"
 				+ "&nbsp Chair for Systems Security<br/>"
-				+ "&nbsp Horst Görtz Institute for IT-Security<br/>"
+				+ "&nbsp Horst Goertz Institute for IT-Security<br/>"
 				+ "&nbsp Ruhr-University Bochum, Germany<br/>"
 				+ "<br/>Project page: <a href=\""+ props.getProperty("software.url")+"\">"+ props.getProperty("software.url")+"</a><br/>"
 				+ "<br/>Credits: <br/>"
 				+ "&nbsp Tilman Bender <br/>"
 				+ "&nbsp Johannes Hoffmann<br/>"
-				+ "&nbsp Christian Kröger <br/>"
+				+ "&nbsp Christian Kroeger <br/>"
 				+ "&nbsp Hanno Lemoine <br/>"
 				+ "&nbsp Martin Ussath"
 	            + "</body></html>");

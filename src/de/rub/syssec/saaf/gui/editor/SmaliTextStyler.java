@@ -162,7 +162,7 @@ public class SmaliTextStyler {
 		while ((pos = text.indexOf(pattern, pos)) >= 0) {
 			// Create highlighter using private painter and apply around pattern
 			// pos +1 damit leerzeichen vorher net unterstrichen wird -> wichtig
-			// jedoch für die Erkennung
+			// jedoch fuer die Erkennung
 			doc.setCharacterAttributes(pos + 1, text.indexOf("\n", pos) - pos,
 					type, false);
 			pos += pattern.length();

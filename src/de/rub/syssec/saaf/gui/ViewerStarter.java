@@ -27,7 +27,7 @@ import de.rub.syssec.saaf.misc.config.ConfigKeys;
 
 /**
  * A small class to start different viewers for different file types
- * @author Christian Kröger
+ * @author Christian Kroeger
  *
  */
 public class ViewerStarter {

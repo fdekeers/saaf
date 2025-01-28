@@ -286,7 +286,7 @@ public class DatabaseHelper {
 						+ "codelines INTEGER,"
 						+ "arithmetic_fraction DOUBLE," // This is the part for
 														// the crypto find, by
-														// Felix Gröbert, makes
+														// Felix Groebert, makes
 														// only sense for a
 														// BB(TODO).
 						+ "hash_fuzzy VARCHAR(127),"
@@ -440,7 +440,7 @@ public class DatabaseHelper {
 				"analyses.id_apk, " +
 				"apk.file_name AS name, " +
 				"analyses.heuristic_result, " +
-				//FIXME: Überprüfe, ob der Count noch falsche Werte anzeigt?
+				//FIXME: ueberpruefe, ob der Count noch falsche Werte anzeigt?
 				//"COUNT(hRe.id) AS count_HResults, "+
 				"(SELECT COUNT(id) FROM heuristic_results WHERE id_analyses=analyses.id) AS count_HResults, "+
 				"bt.bt_count AS count_BTResults, "+

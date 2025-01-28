@@ -203,10 +203,10 @@ public class Heuristic {
 		}
 
 		// if (DEBUG) {
-		// // Achtung es hängt sehr von der Reihenfolge der Aufrufe ab
+		// // Achtung es haengt sehr von der Reihenfolge der Aufrufe ab
 		// // WENN checkINVOKE nach checkSMALI aufgerufen wird, braucht es im
 		// // Schnitt nur 1 ms ansonsten 30ms
-		// // TODO: Test mit größerem Sample und mehr INVOKE Pattern
+		// // TODO: Test mit groesserem Sample und mehr INVOKE Pattern
 		// String name = "INV";
 		// Writer fw = null;
 		// try {
