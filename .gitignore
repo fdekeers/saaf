@@ -1,11 +1,20 @@
+# IDE files
+.vscode/
+
 # Oracle JDK
 jdk-6u45-linux-x64.bin
 
-# Build directory
+# Build directories
 build/
+dist/
 
 # Data directory
 data/
+
+# Output directories
+apps/
+bytecode/
+reports/
 
 # Test output
 TEST-*

@@ -17,12 +17,19 @@
 package de.rub.syssec.saaf.analysis.steps.extract;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
-
+import org.xml.sax.InputSource;
 import brut.androlib.AndrolibException;
 import brut.androlib.ApkDecoder;
 import brut.androlib.err.CantFindFrameworkResException;
@@ -41,6 +48,15 @@ import de.rub.syssec.saaf.misc.config.ConfigKeys;
  *
  */
 public class ApkDecoderInterface {
+
+	// apkdecoder constants
+	public final static short DECODE_SOURCES_NONE = 0x0000;
+	public final static short DECODE_SOURCES_SMALI = 0x0001;
+	public final static short DECODE_SOURCES_JAVA = 0x0002;
+
+	public final static short DECODE_RESOURCES_NONE = 0x0100;
+	public final static short DECODE_RESOURCES_FULL = 0x0101;
+
 	/**
 	 * What to do if the apktool installed on the users system is older than ours.
 	 * 
@@ -76,7 +92,7 @@ public class ApkDecoderInterface {
 
 	public static boolean decode(File apk, File destination) throws DecoderException {
 		
-		boolean decodeSucseccfull = false;
+		boolean isDecodeSuccessful = false;
 		synchronized(MUTEX){
 			ApkDecoder localApkDecoder = new ApkDecoder();
 			
@@ -87,26 +103,37 @@ public class ApkDecoderInterface {
 				localApkDecoder.setOutDir(destination);
 				localApkDecoder.setApkFile(apk);
 				//disable resource decoding
-				localApkDecoder.setDecodeResources((short) 0x0100);				
-				
-				//apkdecoder constants
-//		        public final static short DECODE_SOURCES_NONE = 0x0000;
-//		        public final static short DECODE_SOURCES_SMALI = 0x0001;
-//		        public final static short DECODE_SOURCES_JAVA = 0x0002;
-//
-//		        public final static short DECODE_RESOURCES_NONE = 0x0100;
-//		        public final static short DECODE_RESOURCES_FULL = 0x0101;
+				localApkDecoder.setDecodeResources(ApkDecoderInterface.DECODE_RESOURCES_NONE);
 
-
-				// localApkDecoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_JAVA);  //HL: Not yet implemented by APKTool
+				//localApkDecoder.setDecodeSources(ApkDecoderInterface.DECODE_SOURCES_JAVA);  //HL: Not yet implemented by APKTool
 	        	localApkDecoder.decode();
 	        	
 	        	//extract the manifest file, because disabling decoding resource also disables decoding of the manifest file
-				AndrolibResources res = new AndrolibResources();
-				ExtFile apkFile = new ExtFile(apk);
-				res.decodeManifest(res.getResTable(apkFile,true), apkFile, destination);
-      	
-	        	decodeSucseccfull = true;
+				// AndrolibResources res = new AndrolibResources();
+				// ExtFile apkFile = new ExtFile(apk);
+				// res.decodeManifest(res.getResTable(apkFile,true), apkFile, destination);
+
+				String manifestPath = String.format("%s%sAndroidManifest.xml", destination.getAbsolutePath(), File.separator);
+				File manifestFile = new File(manifestPath);
+				Process process = Runtime.getRuntime().exec("java -jar AXMLPrinter2.jar " + manifestPath);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				StringBuilder decodedXML = new StringBuilder();
+				String line;
+				while ((line = reader.readLine()) != null) {
+					decodedXML.append(line).append("\n");
+				}
+				process.waitFor();
+
+				try {
+					BufferedWriter writer = new BufferedWriter(new FileWriter(manifestFile));
+					writer.write(decodedXML.toString());
+					writer.close();
+				} catch (IOException ex) {
+					LOGGER.error(String.format("Error while writing the decoded manifest file to %s.", manifestPath), ex);
+					throw new DecoderException(ex);
+				}
+
+	        	isDecodeSuccessful = true;
 	        	
 	        } catch (OutDirExistsException ex) {
 	            // Should never occur, because setForceDelete(true) is called. 
@@ -150,7 +177,7 @@ public class ApkDecoderInterface {
 						} catch (AndrolibException e) {
 							throw new DecoderException(e);
 						}
-	        			decodeSucseccfull = true;
+	        			isDecodeSuccessful = true;
 	        			
 	        			//3. Register created framework file to be deleted on the shutdown of SAAF
 	        			File created_apktool_framwork = new File(frameworkDir + "1.apk");
@@ -185,7 +212,7 @@ public class ApkDecoderInterface {
 	        	e.printStackTrace();
 	        }
 	    }
-        return decodeSucseccfull;
+        return isDecodeSuccessful;
 	}
 
 }
