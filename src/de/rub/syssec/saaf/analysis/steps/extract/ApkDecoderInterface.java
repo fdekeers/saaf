@@ -16,14 +16,7 @@
  */
 package de.rub.syssec.saaf.analysis.steps.extract;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.FileInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -108,28 +101,33 @@ public class ApkDecoderInterface {
 				//localApkDecoder.setDecodeSources(ApkDecoderInterface.DECODE_SOURCES_JAVA);  //HL: Not yet implemented by APKTool
 	        	localApkDecoder.decode();
 	        	
-	        	//extract the manifest file, because disabling decoding resource also disables decoding of the manifest file
-				// AndrolibResources res = new AndrolibResources();
-				// ExtFile apkFile = new ExtFile(apk);
-				// res.decodeManifest(res.getResTable(apkFile,true), apkFile, destination);
+	        	// Extract the manifest file, because disabling decoding resource also disables decoding of the manifest file
 
 				String manifestPath = String.format("%s%sAndroidManifest.xml", destination.getAbsolutePath(), File.separator);
 				File manifestFile = new File(manifestPath);
-				Process process = Runtime.getRuntime().exec("java -jar AXMLPrinter2.jar " + manifestPath);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				StringBuilder decodedXML = new StringBuilder();
-				String line;
-				while ((line = reader.readLine()) != null) {
-					decodedXML.append(line).append("\n");
-				}
-				process.waitFor();
 
 				try {
+					// Execute AXMLPrinter2.jar to decode the manifest file
+					Process process = Runtime.getRuntime().exec(String.format("java -jar lib/AXMLPrinter2.jar %s", manifestPath));
+					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+					StringBuilder decodedXML = new StringBuilder();
+					String line;
+					while ((line = reader.readLine()) != null) {
+						decodedXML.append(line).append("\n");
+					}
+					reader.close();
+					int exitCode = process.waitFor();
+					LOGGER.info(String.format("AXMLPrinter2 exited with code %d.", exitCode));
+
+					// Write the decoded manifest to the manifest file
 					BufferedWriter writer = new BufferedWriter(new FileWriter(manifestFile));
 					writer.write(decodedXML.toString());
 					writer.close();
 				} catch (IOException ex) {
 					LOGGER.error(String.format("Error while writing the decoded manifest file to %s.", manifestPath), ex);
+					throw new DecoderException(ex);
+				} catch (InterruptedException ex) {
+					LOGGER.error(String.format("Error while decoding the manifest file %s.", manifestPath), ex);
 					throw new DecoderException(ex);
 				}
 

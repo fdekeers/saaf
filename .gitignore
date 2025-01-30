@@ -4,12 +4,15 @@
 # Oracle JDK
 jdk-6u45-linux-x64.bin
 
+# Test files
+Test.*
+
 # Build directories
 build/
 dist/
 
-# Data directory
-data/
+# Data
+manifests/
 
 # Output directories
 apps/
