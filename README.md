@@ -37,21 +37,21 @@ sh ./scripts/run_saaf.sh
 ```
 sh ./scripts/run_saaf.sh -hl <filename>
 ```
-If <filename> is an apk SAAF will analyze the apk.
-If <filename> is a folder SAAF will analyze all apks that are directly contained in that folder (it will not descend into subdirs)
+If \<filename\> is an apk SAAF will analyze the apk.
+If \<filename\> is a folder SAAF will analyze all apks that are directly contained in that folder (it will not descend into subdirs)
 
 For each APK SAAF will do the following:
 
-###Preprocessing:
+### Preprocessing:
 0. Generate MD5,SHA1 and SHA256 hashes for the file
-1. create a folder for the application in ./bytecode/<nameofapk>_<hashofapk> (from now on called analysis-folder)
-2. extract the content of the apk to ./bytecode/<analysis-folder>/apk_content
-3. decode the exctracted content to ./bytecode/<analysis-folder>/bytecode/
-4. read the AndroidManifest.xml that lies under ./bytecode/<analysis-folder>/bytecode/AndroidManifest.xml
-5. parse the SMALI files living at ./bytecode/<analysis-folder>/bytecode/smali
+1. create a folder for the application in ./bytecode/\<nameofapk\>_\<hashofapk\> (from now on called analysis-folder)
+2. extract the content of the apk to ./bytecode/\<analysis_folder\>/apk_content
+3. decode the exctracted content to ./bytecode/\<analysis_folder\>/bytecode/
+4. read the AndroidManifest.xml that lies under ./bytecode/\<analysis_folder\>/bytecode/AndroidManifest.xml
+5. parse the SMALI files living at ./bytecode/\<analysis_folder\>/bytecode/smali
 6. generate rolling hashes for the smali files (optional)
 
-###Analysis:
+### Analysis:
 1. Categorize the requested permissions in known/unknown (see conf/permissions.xml)
 2. Match heurisitc patterns (see conf/heuristic-patterns.xml)
 3. Perform program slicing for functions of interest (see conf/backtracking_patterns.xml)
