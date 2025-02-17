@@ -4,6 +4,9 @@
 # Oracle JDK
 jdk-6u45-linux-x64.bin
 
+# APK files
+*.apk
+
 # Test files
 Test.*
 
@@ -22,6 +25,7 @@ reports/
 # Test output
 TEST-*
 *.log
+*.log.*
 *.properties
 
 # Output JAR
