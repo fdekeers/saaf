@@ -23,3 +23,9 @@ reports/
 TEST-*
 *.log
 *.properties
+
+# Output JAR
+*.jar
+
+# Random notes
+notes.txt

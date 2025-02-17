@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Heuristic patterns indicate additional information about the methods considered for backtracking.
+	to help steering the algorithm. -->
 <heuristic-patterns xmlns="http://syssec.rub.de/SAAF"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://syssec.rub.de/SMAF schema/heuristic-patterns.xsd">
+	xsi:schemaLocation="http://syssec.rub.de/SAAF schema/heuristic-patterns.xsd">
 	<heuristic-pattern
 		pattern="android/telephony/TelephonyManager->getSubscriberId" type="INVOKE"
 		hvalue="0" description="IMSI" active="true" />
@@ -32,6 +34,8 @@
 		type="INVOKE" hvalue="0" description="execute command" active="true" />
 	<heuristic-pattern pattern="openConnection()Ljava/net/URLConnection"
 		type="SMALI" hvalue="0" description="open HTTP connection" active="true" />
+	<heuristic-pattern pattern="java/net/URL->openConnection"
+		type="INVOKE" hvalue="0" description="open HTTP Connection" active="true" />
 	<heuristic-pattern pattern="javax/crypto/Cipher->doFinal"
 		type="INVOKE" hvalue="0" description="use Java Crypto" active="true" />
 	<heuristic-pattern pattern="permission.INTERNET permission.READ_CONTACTS"

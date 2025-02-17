@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<heuristic-patterns xmlns="http://syssec.rub.de/SMAF"
+<heuristic-patterns xmlns="http://syssec.rub.de/SAAF"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://syssec.rub.de/SMAF schema/heuristic-patterns.xsd">
 	<!-- Spaces  around 'native' are relevant for search -->

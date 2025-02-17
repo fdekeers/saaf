@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Heuristic patterns indicate additional information about the methods considered for backtracking.
+	to help steering the algorithm. -->
 <heuristic-patterns xmlns="http://syssec.rub.de/SAAF"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://syssec.rub.de/SAAF schema/heuristic-patterns.xsd">
+
+	<!-- TCP SOCKETS -->
+	<heuristic-pattern pattern="java/net/Socket->bind"
+		type="INVOKE" hvalue="0" description="TCP socket bind" active="true" />
+	<heuristic-pattern pattern="java/net/Socket->connect"
+		type="INVOKE" hvalue="0" description="TCP socket bind" active="true" />
+
+	<!-- UDP SOCKETS -->
+	<heuristic-pattern pattern="java/net/DatagramSocket->bind"
+		type="INVOKE" hvalue="0" description="UDP socket bind" active="true" />
+	<heuristic-pattern pattern="java/net/DatagramSocket->connect"
+		type="INVOKE" hvalue="0" description="UDP socket connect" active="true" />
+	<heuristic-pattern pattern="java/net/DatagramSocket->send"
+		type="INVOKE" hvalue="0" description="UDP socket send" active="true" />
+	<heuristic-pattern pattern="java/net/DatagramSocket->receive"
+		type="INVOKE" hvalue="0" description="UDP socket receive" active="true" />
+
+
 	<heuristic-pattern
 		pattern="android/telephony/TelephonyManager->getSubscriberId" type="INVOKE"
 		hvalue="0" description="IMSI" active="true" />

@@ -11,7 +11,7 @@ services:
     command: >
       /bin/bash -c "
       sudo /opt/mysql/server-5.5/support-files/mysql.server start;
-      ant fat-jar"
+      /bin/bash"
 
 volumes:
   saaf-data:

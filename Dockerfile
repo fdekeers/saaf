@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
 # Install Java
 ARG JVM_DIR=/usr/lib/jvm
 RUN mkdir -p ${JVM_DIR}
-
 WORKDIR ${JVM_DIR}
 ARG JAVA_INSTALLER_BIN=jdk-6u45-linux-x64.bin
 COPY ${JAVA_INSTALLER_BIN} ${JVM_DIR}/${JAVA_INSTALLER_BIN}
