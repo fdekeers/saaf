@@ -23,12 +23,6 @@ import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
-import brut.androlib.AndrolibException;
-import brut.androlib.ApkDecoder;
-import brut.androlib.err.CantFindFrameworkResException;
-import brut.androlib.err.OutDirExistsException;
-import brut.androlib.res.AndrolibResources;
-import brut.androlib.res.util.ExtFile;
 import de.rub.syssec.saaf.misc.config.Config;
 import de.rub.syssec.saaf.misc.config.ConfigKeys;
 
@@ -42,13 +36,6 @@ import de.rub.syssec.saaf.misc.config.ConfigKeys;
  */
 public class ApkDecoderInterface {
 
-	// apkdecoder constants
-	public final static short DECODE_SOURCES_NONE = 0x0000;
-	public final static short DECODE_SOURCES_SMALI = 0x0001;
-	public final static short DECODE_SOURCES_JAVA = 0x0002;
-
-	public final static short DECODE_RESOURCES_NONE = 0x0100;
-	public final static short DECODE_RESOURCES_FULL = 0x0101;
 
 	/**
 	 * What to do if the apktool installed on the users system is older than ours.
@@ -64,152 +51,106 @@ public class ApkDecoderInterface {
 
 	private static final Logger LOGGER = Logger.getLogger(ApkDecoderInterface.class);
 
-	/**
-	 * Decodes an APK file
-	 *
-	 * <h4>Handles following problems:</h4>
-	 * <p>
-	 * Problem 1:	if SAAF uses an older version of APKTool than the user
-	 * 				~/apktool/framework/1.apk
-	 * Handling:	3 Options for the user ({@link Config})
-	 * 				- default:	APKTool only decode the smali files, no Resources (incl. Manifest)
-	 * 				- mv: 		rename the framework file, and complete decode
-	 * 				- del:		delete the framework file, and complete decode
-	 * </p>
-	 *
-	 * @param apk the apk
-	 * @param destination the destination dir (if already existing, it will be removed firstly)
-	 * @return false if the decoding crashes
-	 */
-	private static final Object  MUTEX= new Object();
+	private static final Object MUTEX= new Object();
 
+
+	/**
+	 * Decodes the AndroidManifest.xml file of an APK.
+	 * Overwrite the existing encoded AndroidManifest.xml file with the decoded one.
+	 * 
+	 * @param manifestPath path to the encoded AndroidManifest.xml file
+	 */
+	// private static void decodeManifest(String manifestPath) throws DecoderException {
+
+	// 	File manifestFile = new File(manifestPath);
+
+	// 	try {
+	// 		// Execute AXMLPrinter2.jar to decode the manifest file
+	// 		Process process = Runtime.getRuntime().exec(String.format("java -jar lib/AXMLPrinter2.jar %s", manifestPath));
+	// 		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+	// 		StringBuilder decodedXML = new StringBuilder();
+	// 		String line;
+	// 		while ((line = reader.readLine()) != null) {
+	// 			decodedXML.append(line).append("\n");
+	// 		}
+	// 		reader.close();
+	// 		int exitCode = process.waitFor();
+	// 		LOGGER.info(String.format("AXMLPrinter2 exited with code %d.", exitCode));
+
+	// 		// Write the decoded manifest to the manifest file
+	// 		BufferedWriter writer = new BufferedWriter(new FileWriter(manifestFile));
+	// 		writer.write(decodedXML.toString());
+	// 		writer.close();
+	// 	} catch (IOException ex) {
+	// 		LOGGER.error(String.format("Error while writing the decoded manifest file to %s.", manifestPath), ex);
+	// 		throw new DecoderException(ex);
+	// 	} catch (InterruptedException ex) {
+	// 		LOGGER.error(String.format("Error while decoding the manifest file %s.", manifestPath), ex);
+	// 		throw new DecoderException(ex);
+	// 	}
+
+	// }
+
+
+	/**
+     * Decodes an APK file.
+     *
+     * @param apk the given APK file to decode
+     * @param destination the destination dir (if already existing, it will be
+     * removed firstly)
+     * @return false if the decoding crashes
+     */
 	public static boolean decode(File apk, File destination) throws DecoderException {
 		
 		boolean isDecodeSuccessful = false;
+
 		synchronized(MUTEX){
-			ApkDecoder localApkDecoder = new ApkDecoder();
-			
-	        try {
-				// HL: The ApkTool can delete the Destination Folder on his own: (also faster)
-				localApkDecoder.setForceDelete(true);
-				
-				localApkDecoder.setOutDir(destination);
-				localApkDecoder.setApkFile(apk);
-				//disable resource decoding
-				localApkDecoder.setDecodeResources(ApkDecoderInterface.DECODE_RESOURCES_NONE);
 
-				//localApkDecoder.setDecodeSources(ApkDecoderInterface.DECODE_SOURCES_JAVA);  //HL: Not yet implemented by APKTool
-	        	localApkDecoder.decode();
-	        	
-	        	// Extract the manifest file, because disabling decoding resource also disables decoding of the manifest file
+			try {
 
-				String manifestPath = String.format("%s%sAndroidManifest.xml", destination.getAbsolutePath(), File.separator);
-				File manifestFile = new File(manifestPath);
+				LOGGER.info(String.format("Decoding APK %s to %s.", apk.getName(), destination.getAbsolutePath()));
 
-				try {
-					// Execute AXMLPrinter2.jar to decode the manifest file
-					Process process = Runtime.getRuntime().exec(String.format("java -jar lib/AXMLPrinter2.jar %s", manifestPath));
-					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-					StringBuilder decodedXML = new StringBuilder();
-					String line;
-					while ((line = reader.readLine()) != null) {
-						decodedXML.append(line).append("\n");
-					}
-					reader.close();
-					int exitCode = process.waitFor();
-					LOGGER.info(String.format("AXMLPrinter2 exited with code %d.", exitCode));
+				// Execute apktool.jar to decode the given APK
+				String cmdApktool = String.format("java -jar lib/static/apktool-2.11.0.jar decode -f -o %s %s", destination.getAbsolutePath(), apk.getAbsolutePath());
+				Process process = Runtime.getRuntime().exec(cmdApktool);
 
-					// Write the decoded manifest to the manifest file
-					BufferedWriter writer = new BufferedWriter(new FileWriter(manifestFile));
-					writer.write(decodedXML.toString());
-					writer.close();
-				} catch (IOException ex) {
-					LOGGER.error(String.format("Error while writing the decoded manifest file to %s.", manifestPath), ex);
-					throw new DecoderException(ex);
-				} catch (InterruptedException ex) {
-					LOGGER.error(String.format("Error while decoding the manifest file %s.", manifestPath), ex);
-					throw new DecoderException(ex);
+				// Read apktool process stdout
+				BufferedReader readerStdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				StringBuilder stdout = new StringBuilder();
+				String line;
+				while ((line = readerStdout.readLine()) != null) {
+					stdout.append(line).append("\n");
 				}
+				readerStdout.close();
 
-	        	isDecodeSuccessful = true;
-	        	
-	        } catch (OutDirExistsException ex) {
-	            // Should never occur, because setForceDelete(true) is called. 
-	        	LOGGER.error(
-	                "Destination directory (" + destination.getAbsolutePath() + ") " +
-	                "already exists.",ex);
-	        	throw new DecoderException(ex);
-	        } catch (CantFindFrameworkResException ex) {
-	            LOGGER.warn(
-	                "Can't find framework resources for package of id: " +
-	                String.valueOf(ex.getPkgId()) + ". You must install proper " +
-	                "framework files, see Android-APKtool-project website for more info.");
-	            throw new DecoderException(ex);
-	        } catch (AndrolibException ex) {
-	        	/**
-	        	 * Handle the special type of AndrolibException caused by an outdated
-	        	 * version of Android-APKTool (used by SAAF) in contrast to the version the user uses.
-	        	 */
-	        	if (ex.getMessage().startsWith("Multiple resources:")) {
-	        		Treatment userOption = Treatment.valueOf(Config.getInstance().getConfigValue(ConfigKeys.APKTOOL_TREATMENT));
-	        		
-	        		if ( (userOption == Treatment.DELETE) 
-	        			|| (userOption == Treatment.RENAME)) {
-	        			
-	        			//1. Rename or Delete current framework file
-	        			final String frameworkDir = System.getProperty("user.home") + File.separatorChar + 
-		            		"apktool" + File.separatorChar + "framework" + File.separatorChar;
-	        			File apktool_framwork = new File(frameworkDir + "1.apk");
-	        			if (userOption == Treatment.DELETE) {
-	        				apktool_framwork.delete();
-	        			} else {
-	        				//case Config.RENAME_APKtool_FRAMEWORK_IF_TOO_OLD
-	        				final String curDateTime = new SimpleDateFormat("yyyy-MM-dd_HHmm").format(Calendar.getInstance().getTime());
-	        				apktool_framwork.renameTo(new File(frameworkDir + "1_mv_by_SAAF_on_" + curDateTime + ".apk"));
-	        			}
-	           			//2. Next try to decode
-	        			try {
-							localApkDecoder.decode();
-						} catch (IOException e) {
-							throw new DecoderException(e);
-						} catch (AndrolibException e) {
-							throw new DecoderException(e);
-						}
-	        			isDecodeSuccessful = true;
-	        			
-	        			//3. Register created framework file to be deleted on the shutdown of SAAF
-	        			File created_apktool_framwork = new File(frameworkDir + "1.apk");
-	        			if ( created_apktool_framwork.exists()) {
-	        				created_apktool_framwork.deleteOnExit();
-	        			}
-	        		} else {
-	        			//case Config.DONT_TOUCH_APKtool_FRAMEWORK_IF_TOO_OLD
-	        			
-	        			//localApkDecoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_NONE);	//HL: Alternative, if APKTool crashes by Resources
-	        			try {
-	        				//localApkDecoder.setDecodeResources((short)0x0100);	//HL: Alternative, if APKTool crashes by Resources
-							localApkDecoder.decode();
-						} catch (IOException e) {
-							throw new DecoderException(e);
-						} catch (AndrolibException e) {
-							throw new DecoderException(e);
-						}
-	        			
-	        			LOGGER.error("Could not decode app correctly with APKtool, " +
-	        					"because SAAF version is older than your APKtool. \nYou can " +
-	        					"solve this problem by allowing SAAF in the config file " +
-	        					"to move (mv) or to delete (del) \nthe framework file " +
-	        					"(~/apktool/framwork/1.apk)." +
-	        					"e.g. 'PERMISSION_FOR_APKtool_FRAMEWORK_TO=mv'");
-	        			//TODO: Check if Logger crashes in headless mode
-	        		}
-	        	} else {
-	        		throw new DecoderException(ex);
-	        	}
-	        }catch(Exception e){
-	        	e.printStackTrace();
-	        }
+				// Read apktool process stderr
+				BufferedReader readerStderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				StringBuilder stderr = new StringBuilder();
+				while ((line = readerStderr.readLine()) != null) {
+					stderr.append(line).append("\n");
+				}
+				readerStderr.close();
+                
+				// Output
+				int exitCode = process.waitFor();
+				LOGGER.info(String.format("apktool exited with code %d.", exitCode));
+				LOGGER.info("apktool's stdout:\n");
+				LOGGER.info(stdout.toString());
+				LOGGER.info("apktool's stderr:\n");
+				LOGGER.info(stderr.toString());
+
+				isDecodeSuccessful = true;
+
+			} catch (IOException ex) {
+				LOGGER.error(String.format("Error while decoding the APK %s.", apk.getName()), ex);
+				throw new DecoderException(ex);
+			} catch (InterruptedException ex) {
+				LOGGER.error(String.format("Error while decoding the APK %s.", apk.getName()), ex);
+				throw new DecoderException(ex);
+			}
+	        
 	    }
+
         return isDecodeSuccessful;
 	}
 

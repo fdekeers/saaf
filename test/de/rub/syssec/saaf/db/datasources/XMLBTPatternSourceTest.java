@@ -82,7 +82,7 @@ public class XMLBTPatternSourceTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		ds = new XMLBTPatternSource("conf/backtracking-patterns.xml","conf/backtracking-patterns.xsd");
+		ds = new XMLBTPatternSource("conf/backtracking-patterns.xml","conf/schema/backtracking-patterns.xsd");
 	}
 
 	@After

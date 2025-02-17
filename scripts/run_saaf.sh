@@ -6,4 +6,4 @@ VM_ARGS="-Xms512M -Xmx2G"
 cd $SAAF_BIN/..
 java $VM_ARGS \
 -Dfile.encoding=UTF-8 \
--jar SAAF.jar "$@"
+-jar dist/SAAF.jar "$@"

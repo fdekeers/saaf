@@ -1,7 +1,8 @@
 services:
-  saaf:
+
+  saaf-build:
     image: saaf
-    container_name: saaf
+    container_name: saaf-build
     volumes:
       - .:/home/ubuntu/saaf
       - saaf-data:/opt/mysql/server-5.5/data
@@ -11,7 +12,8 @@ services:
     command: >
       /bin/bash -c "
       sudo /opt/mysql/server-5.5/support-files/mysql.server start;
-      /bin/bash"
+      ant fat-jar"
+
 
 volumes:
   saaf-data:

@@ -9,9 +9,10 @@ RUN apt-get update && apt-get install -y \
     git \
     libaio1 \
     libncurses5 \
+    openjdk-21-jre \
     && apt clean
 
-# Install Java
+# Install JDK 6
 ARG JVM_DIR=/usr/lib/jvm
 RUN mkdir -p ${JVM_DIR}
 WORKDIR ${JVM_DIR}
@@ -20,6 +21,9 @@ COPY ${JAVA_INSTALLER_BIN} ${JVM_DIR}/${JAVA_INSTALLER_BIN}
 RUN chmod +x ${JVM_DIR}/${JAVA_INSTALLER_BIN}
 RUN ${JVM_DIR}/${JAVA_INSTALLER_BIN} && \
     rm ${JVM_DIR}/${JAVA_INSTALLER_BIN}
+ARG JDK_BIN_DIR=${JVM_DIR}/jdk1.6.0_45/bin
+RUN ln -s ${JDK_BIN_DIR}/java ${JDK_BIN_DIR}/java1.6
+RUN ln -s ${JDK_BIN_DIR}/java /usr/bin/java1.6
 
 ## Update environment variables
 # JAVA_HOME
