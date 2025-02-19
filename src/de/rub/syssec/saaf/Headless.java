@@ -181,6 +181,9 @@ public class Headless {
 		int numThreads = CONFIG.getIntConfigValue(ConfigKeys.MULTITHREADING_THREADS, corePoolSize);
 		if (!CONFIG.getBooleanConfigValue(ConfigKeys.MULTITHREADING_ENABLED)) { // multithreading is disabled
 			numThreads = 1;
+			LOGGER.info(String.format("Using 1 thread."));
+		} else {
+			LOGGER.info(String.format("Using %d threads.", numThreads));
 		}
 		// Create executor and submit jobs
 		SAAFThreadPoolExecutor executor = new SAAFThreadPoolExecutor(apks,
