@@ -54,8 +54,11 @@ RUN /tmp/configure-mysql.sh
 
 # Create non-root sudo user
 ARG USER=ubuntu
+ARG UID=1000
+ARG GID=1000
 ARG HOME=/home/${USER}
-RUN useradd -d ${HOME} -s /bin/bash ${USER}
+RUN groupadd -f -g ${GID} ${USER}
+RUN useradd -d ${HOME} -s /bin/bash -u ${UID} -g ${GID} ${USER}
 RUN echo "${USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER ${USER}
 WORKDIR ${HOME}
