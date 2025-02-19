@@ -8,7 +8,7 @@ jdk-6u45-linux-x64.bin
 *.apk
 
 # Test files
-Test.*
+Test*
 
 # Build directories
 build/

@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import de.rub.syssec.saaf.misc.config.Config;
 import de.rub.syssec.saaf.misc.config.ConfigKeys;
+import java.util.regex.Pattern;
 
 
 /**
@@ -51,45 +52,90 @@ public class ApkDecoderInterface {
 
 	private static final Logger LOGGER = Logger.getLogger(ApkDecoderInterface.class);
 
-	private static final Object MUTEX= new Object();
+	private static final Object MUTEX = new Object();
 
 
-	/**
-	 * Decodes the AndroidManifest.xml file of an APK.
-	 * Overwrite the existing encoded AndroidManifest.xml file with the decoded one.
-	 * 
-	 * @param manifestPath path to the encoded AndroidManifest.xml file
-	 */
-	// private static void decodeManifest(String manifestPath) throws DecoderException {
+	private static File[] getOtherSmaliDirs(File parentDir) {
 
-	// 	File manifestFile = new File(manifestPath);
+		final Pattern pattern = Pattern.compile("smali_classes[0-9]+");
+		FilenameFilter filenameFilter = new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return pattern.matcher(name).matches();
+			}
+		};
 
-	// 	try {
-	// 		// Execute AXMLPrinter2.jar to decode the manifest file
-	// 		Process process = Runtime.getRuntime().exec(String.format("java -jar lib/AXMLPrinter2.jar %s", manifestPath));
-	// 		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-	// 		StringBuilder decodedXML = new StringBuilder();
-	// 		String line;
-	// 		while ((line = reader.readLine()) != null) {
-	// 			decodedXML.append(line).append("\n");
-	// 		}
-	// 		reader.close();
-	// 		int exitCode = process.waitFor();
-	// 		LOGGER.info(String.format("AXMLPrinter2 exited with code %d.", exitCode));
+		return parentDir.listFiles(filenameFilter);
 
-	// 		// Write the decoded manifest to the manifest file
-	// 		BufferedWriter writer = new BufferedWriter(new FileWriter(manifestFile));
-	// 		writer.write(decodedXML.toString());
-	// 		writer.close();
-	// 	} catch (IOException ex) {
-	// 		LOGGER.error(String.format("Error while writing the decoded manifest file to %s.", manifestPath), ex);
-	// 		throw new DecoderException(ex);
-	// 	} catch (InterruptedException ex) {
-	// 		LOGGER.error(String.format("Error while decoding the manifest file %s.", manifestPath), ex);
-	// 		throw new DecoderException(ex);
-	// 	}
+	}
 
-	// }
+
+	private static void copyFile(File targetFile, File sourceFile)
+	throws IOException {
+		
+		// Create parent directories if they do not exist
+		targetFile.getParentFile().mkdirs();
+
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		try {
+			fis = new FileInputStream(sourceFile);
+			fos = new FileOutputStream(targetFile);
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = fis.read(buffer)) > 0) {
+				fos.write(buffer, 0, length);
+			}
+			fis.close();
+			fos.close();
+		} finally {
+			if (fis != null) {
+				fis.close();
+			}
+			if (fos != null) {
+				fos.close();
+			}
+		}
+
+	}
+
+
+	private static void mergeDirs(File targetDir, File sourceDir)
+	throws IOException {
+		
+		File[] sourceFiles = sourceDir.listFiles();
+		if (sourceFiles != null) {
+			for (File sourceFile : sourceFiles) {
+				File targetFile = new File(targetDir, sourceFile.getName());
+				if (sourceFile.isDirectory()) {
+					mergeDirs(targetFile, sourceFile);
+				} else {
+					if (! targetFile.exists()) {
+						copyFile(targetFile, sourceFile);
+					}
+				}
+			}
+		}
+
+	}
+
+
+	private static void mergeSmaliDirs(File parentDir)
+	throws IOException {
+
+		File smaliBaseDir = new File(parentDir, "smali");
+		File[] smaliOtherDirs = getOtherSmaliDirs(parentDir);
+
+		if (smaliOtherDirs.length == 0) {
+			LOGGER.info("No other smali directories found.");
+			return;
+		}
+
+		for (File smaliOtherDir : smaliOtherDirs) {
+			mergeDirs(smaliBaseDir, smaliOtherDir);
+		}
+
+	}
 
 
 	/**
@@ -146,6 +192,15 @@ public class ApkDecoderInterface {
 				throw new DecoderException(ex);
 			} catch (InterruptedException ex) {
 				LOGGER.error(String.format("Error while decoding the APK %s.", apk.getName()), ex);
+				throw new DecoderException(ex);
+			}
+
+
+			// Merge smali directories
+			try {
+				mergeSmaliDirs(destination);
+			} catch (IOException ex) {
+				LOGGER.error(String.format("Error while merging smali directories of the APK %s.", apk.getName()), ex);
 				throw new DecoderException(ex);
 			}
 	        

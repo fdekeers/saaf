@@ -76,7 +76,7 @@ public class SmaliClass implements ClassInterface {
 
 	private final HashSet<String> implementedInterfaces = new HashSet<String>();
 	
-	private static final int MAXIMAL_SMALI_FILE_SIZE = 1024 * 1024 * 100; // 100mb
+	private static final int MAXIMAL_SMALI_FILE_SIZE = 1024 * 1024 * 100; // 100 MB
 	private int size = 0; 
 	
 	private final int label;
@@ -132,7 +132,7 @@ public class SmaliClass implements ClassInterface {
 			fis = new FileInputStream(smaliFile);
 			bis = new BufferedInputStream(fis);
 			byte[] line;
-			while ((line = ByteUtils.parseLine(bis, 256000)) != null) { // 250k
+			while ((line = ByteUtils.parseLine(bis, 0)) != null) { // 250k
 				codeLineList.addLast(new CodeLine(line, lineNr++, this));
 				size += line.length;
 				if (size > MAXIMAL_SMALI_FILE_SIZE) throw new IOException("Maximum SMALI file size of "+MAXIMAL_SMALI_FILE_SIZE+" bytes exceeded!");
