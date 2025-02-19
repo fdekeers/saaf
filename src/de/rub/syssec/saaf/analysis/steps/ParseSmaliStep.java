@@ -42,7 +42,7 @@ public class ParseSmaliStep extends AbstractStep {
 	/**
 	 * Denotes the maximum size of all parsed SMALI files in bytes.
 	 */
-	private static final int MAXIMUM_FILES_SIZE = 1024 * 1024 * 1000; // 1000 mb
+	private static final int MAXIMUM_FILES_SIZE = 1024 * 1024 * 1000; // 1000 MB
 
 	
 	public ParseSmaliStep(Config config, boolean enabled) {

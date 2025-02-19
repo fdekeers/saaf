@@ -2,8 +2,8 @@
 #get the actual path of this script
 SAAF_BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo $SAAF_BIN
-VM_ARGS="-Xms512M -Xmx2G"
+VM_ARGS="-Xms512M -Xmx32G"
 cd $SAAF_BIN/..
 java $VM_ARGS \
 -Dfile.encoding=UTF-8 \
--jar SAAF.jar "$@"
+-jar dist/SAAF.jar "$@"
