@@ -1437,7 +1437,9 @@ public class DetectionLogic {
 								}
 								else if (realParameterIndex >= regs.size() || realParameterIndex < 0) {
 									// This should not happen!
-									throw new DetectionLogicError("Could not backtrack, parameterIndex "+realParameterIndex+" is out of range! cl="+cl);
+									//throw new DetectionLogicError("Could not backtrack, parameterIndex "+realParameterIndex+" is out of range! cl="+cl);
+									LOGGER.info("Could not backtrack, parameterIndex "+realParameterIndex+" is out of range! cl="+cl);
+									continue;
 								}
 								register = regs.get(realParameterIndex);
 								int index = bb.getCodeLines().indexOf(cl); // FIXME make if better and faster
