@@ -9,53 +9,111 @@
 
 	<!-- java.net.Socket constructors -->
 
+	<!-- java.net.Socket(InetAddress address, int port) -->
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket constructor"
+		description="java.net.Socket(InetAddress address, int port); parameterIndex=0"
 		method="&lt;init&gt;"
 		parameters="Ljava/net/InetAddress;I"
 		interesting="0" />
-
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket constructor"
+		description="java.net.Socket(InetAddress address, int port); parameterIndex=1"
+		method="&lt;init&gt;"
+		parameters="Ljava/net/InetAddress;I"
+		interesting="1" />
+
+	<!-- java.net.Socket(InetAddress address, int port, InetAddress localAddr, int localPort) -->
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(InetAddress address, int port, InetAddress localAddr, int localPort); parameterIndex=0"
 		method="&lt;init&gt;"
 		parameters="Ljava/net/InetAddress;ILjava/net/InetAddress;I"
 		interesting="0" />
-	
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket constructor"
+		description="java.net.Socket(InetAddress address, int port, InetAddress localAddr, int localPort); parameterIndex=1"
+		method="&lt;init&gt;"
+		parameters="Ljava/net/InetAddress;ILjava/net/InetAddress;I"
+		interesting="1" />
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(InetAddress address, int port, InetAddress localAddr, int localPort); parameterIndex=2"
+		method="&lt;init&gt;"
+		parameters="Ljava/net/InetAddress;ILjava/net/InetAddress;I"
+		interesting="2" />
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(InetAddress address, int port, InetAddress localAddr, int localPort); parameterIndex=3"
+		method="&lt;init&gt;"
+		parameters="Ljava/net/InetAddress;ILjava/net/InetAddress;I"
+		interesting="3" />
+	
+	<!-- java.net.Socket(String host, int port) -->
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(String host, int port); parameterIndex=0"
 		method="&lt;init&gt;"
 		parameters="Ljava/lang/String;I"
 		interesting="0" />
-
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket constructor"
+		description="java.net.Socket(String host, int port); parameterIndex=1"
+		method="&lt;init&gt;"
+		parameters="Ljava/lang/String;I"
+		interesting="1" />
+
+	<!-- java.net.Socket(String host, int port, boolean stream) -->
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(String host, int port, boolean stream); parameterIndex=0"
 		method="&lt;init&gt;"
 		parameters="Ljava/lang/String;IZ"
 		interesting="0" />
-	
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket constructor"
+		description="java.net.Socket(String host, int port, boolean stream); parameterIndex=1"
+		method="&lt;init&gt;"
+		parameters="Ljava/lang/String;IZ"
+		interesting="1" />
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(String host, int port, boolean stream); parameterIndex=2"
+		method="&lt;init&gt;"
+		parameters="Ljava/lang/String;IZ"
+		interesting="2" />
+	
+	<!-- java.net.Socket(String host, int port, InetAddress localAddr, int localPort) -->
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(String host, int port, InetAddress localAddr, int localPort); parameterIndex=0"
 		method="&lt;init&gt;"
 		parameters="Ljava/lang/String;ILjava/net/InetAddress;I"
 		interesting="0" />
-	
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket constructor"
+		description="java.net.Socket(String host, int port, InetAddress localAddr, int localPort); parameterIndex=1"
 		method="&lt;init&gt;"
-		parameters="Ljava/net/SocketAddress;Ljava/net/SocketAddress;Z"
-		interesting="0" />
+		parameters="Ljava/lang/String;ILjava/net/InetAddress;I"
+		interesting="1" />
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(String host, int port, InetAddress localAddr, int localPort); parameterIndex=2"
+		method="&lt;init&gt;"
+		parameters="Ljava/lang/String;ILjava/net/InetAddress;I"
+		interesting="2" />
+	<backtracking-pattern active="true"
+		class="java/net/Socket"
+		description="java.net.Socket(String host, int port, InetAddress localAddr, int localPort); parameterIndex=3"
+		method="&lt;init&gt;"
+		parameters="Ljava/lang/String;ILjava/net/InetAddress;I"
+		interesting="3" />
 
 	
-	<!-- java.net.Socket.bind -->
+	<!-- java.net.Socket.bind(SocketAddress bindpoint) -->
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket"
+		description="java.net.Socket.bind(SocketAddress bindpoint); parameterIndex=0"
 		method="bind"
 		parameters="Ljava/net/SocketAddress;"
 		interesting="0" />
@@ -63,16 +121,18 @@
 
 	<!-- java.net.Socket.connect -->
 
+	<!-- java.net.Socket.connect(SocketAddress endpoint) -->
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket connect"
+		description="java.net.Socket.connect(SocketAddress endpoint); parameterIndex=0"
 		method="connect"
 		parameters="Ljava/net/SocketAddress;"
 		interesting="0" />
-
+	
+	<!-- java.net.Socket.connect(SocketAddress endpoint, int timeout) -->
 	<backtracking-pattern active="true"
 		class="java/net/Socket"
-		description="TCP socket connect"
+		description="java.net.Socket.connect(SocketAddress endpoint, int timeout); parameterIndex=0"
 		method="connect"
 		parameters="Ljava/net/SocketAddress;I"
 		interesting="0" />
@@ -81,40 +141,42 @@
 	<!-- UDP SOCKETS -->
 
 	<!-- java.net.DatagramSocket constructors -->
-
-	<backtracking-pattern active="true"
-		class="java/net/DatagramSocket"
-		description="UDP socket constructor"
-		method="&lt;init&gt;"
-		parameters=""
-		interesting="0" />
 	
+	<!-- java.net.DatagramSocket(int port) -->
 	<backtracking-pattern active="true"
 		class="java/net/DatagramSocket"
-		description="UDP socket constructor"
+		description="java.net.DatagramSocket(int port); parameterIndex=0"
 		method="&lt;init&gt;"
 		parameters="I"
 		interesting="0" />
 
+	<!-- java.net.DatagramSocket(SocketAddress bindaddr) -->
 	<backtracking-pattern active="true"
 		class="java/net/DatagramSocket"
-		description="UDP socket constructor"
+		description="java.net.DatagramSocket(SocketAddress bindaddr); parameterIndex=0"
 		method="&lt;init&gt;"
 		parameters="Ljava/net/SocketAddress;"
 		interesting="0" />
 
+	<!-- java.net.DatagramSocket(int port, InetAddress laddr) -->
 	<backtracking-pattern active="true"
 		class="java/net/DatagramSocket"
-		description="UDP socket constructor"
+		description="java.net.DatagramSocket(int port, InetAddress laddr); parameterIndex=0"
 		method="&lt;init&gt;"
 		parameters="ILjava/net/InetAddress;"
 		interesting="0" />
-
-	
-	<!-- java.net.DatagramSocket.bind -->
 	<backtracking-pattern active="true"
 		class="java/net/DatagramSocket"
-		description="UDP socket bind"
+		description="java.net.DatagramSocket(int port, InetAddress laddr); parameterIndex=1"
+		method="&lt;init&gt;"
+		parameters="ILjava/net/InetAddress;"
+		interesting="1" />
+
+	
+	<!-- java.net.DatagramSocket.bind(SocketAddress addr) -->
+	<backtracking-pattern active="true"
+		class="java/net/DatagramSocket"
+		description="java.net.DatagramSocket.bind(SocketAddress addr); parameterIndex=0"
 		method="bind"
 		parameters="Ljava/net/SocketAddress;"
 		interesting="0" />
@@ -122,116 +184,48 @@
 	
 	<!-- java.net.DatagramSocket.connect -->
 
+	<!-- java.net.DatagramSocket.connect(SocketAddress addr) -->
 	<backtracking-pattern active="true"
 		class="java/net/DatagramSocket"
-		description="UDP socket connect"
+		description="java.net.DatagramSocket.connect(SocketAddress addr); parameterIndex=0"
 		method="connect"
 		parameters="Ljava/net/SocketAddress;"
 		interesting="0" />
 
+	<!-- java.net.DatagramSocket.connect(InetAddress address, int port) -->
 	<backtracking-pattern active="true"
 		class="java/net/DatagramSocket"
-		description="UDP socket connect"
+		description="java.net.DatagramSocket.connect(InetAddress address, int port); parameterIndex=0"
 		method="connect"
 		parameters="Ljava/net/InetAddress;I"
 		interesting="0" />
-
-
-	<!-- java.net.DatagramSocket.send -->
 	<backtracking-pattern active="true"
 		class="java/net/DatagramSocket"
-		description="UDP socket send"
+		description="java.net.DatagramSocket.connect(InetAddress address, int port); parameterIndex=1"
+		method="connect"
+		parameters="Ljava/net/InetAddress;I"
+		interesting="1" />
+
+
+	<!-- java.net.DatagramSocket.send(DatagramPacket p) -->
+	<backtracking-pattern active="true"
+		class="java/net/DatagramSocket"
+		description="java.net.DatagramSocket.send(DatagramPacket p); parameterIndex=0"
 		method="send"
 		parameters="Ljava/net/DatagramPacket;"
 		interesting="0" />
 
-	<!-- java.net.DatagramSocket.receive -->
+	<!-- java.net.DatagramSocket.receive(DatagramPacket p) -->
 	<backtracking-pattern active="true"
 		class="java/net/DatagramSocket"
-		description="UDP socket receive"
+		description="java.net.DatagramSocket.receive(DatagramPacket p); parameterIndex=0"
 		method="receive"
 		parameters="Ljava/net/DatagramPacket;"
 		interesting="0" />
 
 
 
-	<backtracking-pattern active="true"
-		class="javax/net/ssl/SSLSocket" description="SSL Cipher Suites"
-		method="setEnabledCipherSuites" parameters="[Ljava/lang/String;"
-		interesting="0" />
+	<!-- Example patterns have been removed -->
 
-	<backtracking-pattern active="true"
-		class="javax/net/ssl/SSLSocketFactory" description="SSL Connections"
-		method="createSocket" parameters="Ljava/lang/String;I" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="javax/net/ssl/SSLSocketFactory" description="SSL Connections"
-		method="createSocket" parameters="Ljava/lang/String;I" interesting="1" />
-
-	<backtracking-pattern active="true" class="android/net/Uri"
-		description="Android URI Parser" parameters="Ljava/lang/String;"
-		method="parse" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="java/net/URL"
-		description="Set URL -&gt; look for openConnection()"
-		method="&lt;init&gt;"
-		parameters="Ljava/lang/String;"
-		interesting="0" />
-
-	<backtracking-pattern active="true" class="java/net/URI"
-		description="Apache URI Parser" method="&lt;init&gt;" parameters="Ljava/lang/String;"
-		interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpGet" description="Apache HTTP GET"
-		method="&lt;init&gt;" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpGet" description="Apache HTTP GET"
-		method="setURI" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpPost" description="Apache HTTP POST"
-		method="&lt;init&gt;" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpPost" description="Apache HTTP POST"
-		method="setURI" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpHead" description="Apache HTTP HEAD"
-		method="&lt;init&gt;" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpHead" description="Apache HTTP HEAD"
-		method="setURI" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpPut" description="Apache HTTP PUT"
-		method="&lt;init&gt;" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpPut" description="Apache HTTP PUT"
-		method="setURI" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpDelete" description="Apache HTTP DELETE"
-		method="&lt;init&gt;" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="org/apache/http/client/methods/HttpDelete" description="Apache HTTP DELETE"
-		method="setURI" parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="android/webkit/WebView" description="Webview URL" method="loadUrl"
-		parameters="Ljava/lang/String;" interesting="0" />
-
-	<backtracking-pattern active="true"
-		class="android/webkit/WebView" description="Webview URL" method="loadUrl"
-		parameters="Ljava/lang/String;Ljava/util/Map;" interesting="0" />
-	<backtracking-pattern active="true"
-		class="android/webkit/WebView" description="Webview URL" method="loadUrl"
-		parameters="Ljava/lang/String;Ljava/util/Map;" interesting="1" />
 
 </backtracking-patterns>
